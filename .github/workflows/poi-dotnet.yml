@@ -32,7 +32,7 @@ jobs:
           GITHUB_COMMIT_SHA: ${{ github.sha }}
           GITHUB_REPO_OWNER: 'chu-chen'
           GITHUB_REPO_NAME: 'myrepo'
-          GITHUB_ISSUE_TITLE: 'Issue auto created'
-          GITHUB_ISSUE_BODY: 'Check your failed build'  
+          GITHUB_ISSUE_TITLE: 'Issue auto created for POI build'
+          GITHUB_ISSUE_BODY: 'Check your failed POI build'  
     - name: Test
       run: dotnet test apis/poi/tests/UnitTests/UnitTests.csproj --no-build --verbosity normal
