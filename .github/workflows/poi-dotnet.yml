@@ -2,9 +2,9 @@ name: .NET
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, chu-chen-branch ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, chu-chen-branch ]
   workflow_dispatch:
 
 jobs:
@@ -24,5 +24,15 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       working-directory: apis/poi
+    - name: Create issue on build failure
+      if: ${{ failure() }}
+      uses: JasonEtco/create-an-issue@v2
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_COMMIT_SHA: ${{ github.sha }}
+          GITHUB_REPO_OWNER: 'chu-chen'
+          GITHUB_REPO_NAME: 'myrepo'
+          GITHUB_ISSUE_TITLE: 'Issue auto created'
+          GITHUB_ISSUE_BODY: 'Check your failed build'  
     - name: Test
       run: dotnet test apis/poi/tests/UnitTests/UnitTests.csproj --no-build --verbosity normal
