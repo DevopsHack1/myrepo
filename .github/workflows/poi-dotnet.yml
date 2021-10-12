@@ -24,14 +24,11 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       working-directory: apis/poi2
-    - name: Create issue on build failure
+    - name: Create An Issue
       if: ${{ failure() }}
-      uses: JasonEtco/create-an-issue@v2
+      uses: JasonEtco/create-an-issue@v2.6.0
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_COMMIT_SHA: ${{ github.sha }}
-          GITHUB_REPO_OWNER: 'chu-chen'
-          GITHUB_REPO_NAME: 'myrepo'
           GITHUB_ISSUE_TITLE: 'Issue auto created for POI build'
           GITHUB_ISSUE_BODY: 'Check your failed POI build'  
     - name: Test
