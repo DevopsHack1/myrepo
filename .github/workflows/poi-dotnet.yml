@@ -23,6 +23,6 @@ jobs:
       working-directory: apis/poi
     - name: Build
       run: dotnet build --no-restore
-      working-directory: apis/poi/web
+      working-directory: apis/poi
     - name: Test
       run: dotnet test apis/poi/tests/UnitTests/UnitTests.csproj --no-build --verbosity normal
