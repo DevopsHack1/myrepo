@@ -32,6 +32,6 @@ jobs:
         GITHUB_ISSUE_TITLE: 'Issue auto created for POI build'
         GITHUB_ISSUE_BODY: 'Check your failed POI build'
       with:
-        filename: .github/issue_template_chu.md
+        filename: .github/ISSUE_TEMPLATE_chu.md
     - name: Test
       run: dotnet test apis/poi/tests/UnitTests/UnitTests.csproj --no-build --verbosity normal
