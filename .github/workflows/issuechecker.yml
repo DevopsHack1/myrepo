@@ -24,8 +24,9 @@ jobs:
       # You may pin to the exact commit or the version.
       # uses: hattan/verify-linked-issue-action@95c0d0150d7e7687e45a76fbf0b0c6aa8daef288
         uses: hattan/verify-linked-issue-action@v1.1.1
-        with:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
           # The text to use as the PR comen for when for pull requests with no linked issues.
           message: you have to link an issue for the pull request
           # The name of the file to use as the comment template for pull requests with no linked issues.
