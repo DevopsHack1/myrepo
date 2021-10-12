@@ -23,7 +23,7 @@ jobs:
       working-directory: apis/poi
     - name: Build
       run: dotnet build --no-restore
-      working-directory: apis/poi
+      working-directory: apis/poi2
     - name: Create issue on build failure
       if: ${{ failure() }}
       uses: JasonEtco/create-an-issue@v2
