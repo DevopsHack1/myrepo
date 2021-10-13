@@ -35,9 +35,9 @@ jobs:
           # Docker Registry Url, eg: registry.xxxxx.cs.com
           registry_url: openhackfc90kk36acr.azurecr.io
           # Docker Image Namespaces, eg: adotcode
-          namespaces: trips
+          namespaces: devopsoh
           # Docker Image Repository Name, eg: adc.ms.eureka
-          repository_name: devopsoh/api-poi
+          repository_name: api-poi
           # Username used to log against the Docker registry
           user_name: ${{ secrets.REGISTRY_USERNAME }}
           # Password or personal access token used to log against the Docker registry
