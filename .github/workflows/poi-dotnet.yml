@@ -1,0 +1,37 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main, chu-chen-branch ]
+  pull_request:
+    branches: [ main, chu-chen-branch ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1.7.2
+      with:
+        dotnet-version: 3.1.x
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: apis/poi
+    - name: Build
+      run: dotnet build --no-restore
+      working-directory: apis/poi
+    - name: Test
+      run: dotnet test apis/poi/tests/UnitTests/UnitTests.csproj --no-build --verbosity normal
+    - name: Create An Issue
+      if: ${{ failure() }}
+      uses: JasonEtco/create-an-issue@v2.6.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_ISSUE_TITLE: 'Issue auto created for POI build'
+        GITHUB_ISSUE_BODY: 'Check your failed POI build'
+      with:
+        filename: .github/ISSUE_TEMPLATE_chu.md
