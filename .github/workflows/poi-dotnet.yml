@@ -42,7 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
-    steps:  
+    steps:
+    - uses: actions/checkout@v2
     - name: Docker Images Build And Push
     # You may pin to the exact commit or the version.
     # uses: risfeng/docker-image-build-push-action@cb2810d0b48aeef5fec933dee19b595319c80e1d
