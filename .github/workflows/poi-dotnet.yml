@@ -1,10 +1,12 @@
-name: .NET
+name: POI (.NET) Build and Test
 
 on:
   push:
     branches: [ main, chu-chen-branch ]
+    paths: apis/poi
   pull_request:
     branches: [ main, chu-chen-branch ]
+    paths: apis/poi
   workflow_dispatch:
 
 jobs:
