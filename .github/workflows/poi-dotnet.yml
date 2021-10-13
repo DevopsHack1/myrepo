@@ -23,7 +23,9 @@ jobs:
       working-directory: apis/poi
     - name: Build
       run: dotnet build --no-restore
-      working-directory: apis/poi2
+      working-directory: apis/poi
+    - name: Test
+      run: dotnet test apis/poi/tests/UnitTests/UnitTests.csproj --no-build --verbosity normal
     - name: Create An Issue
       if: ${{ failure() }}
       uses: JasonEtco/create-an-issue@v2.6.0
@@ -33,5 +35,3 @@ jobs:
         GITHUB_ISSUE_BODY: 'Check your failed POI build'
       with:
         filename: .github/ISSUE_TEMPLATE_chu.md
-    - name: Test
-      run: dotnet test apis/poi/tests/UnitTests/UnitTests.csproj --no-build --verbosity normal
