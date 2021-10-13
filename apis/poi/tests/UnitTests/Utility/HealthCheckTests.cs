@@ -25,7 +25,7 @@ namespace UnitTests.Utility
       //act
       HealthCheckResult result = await healthCheck.CheckHealthAsync(null,token);
       //assert
-      Assert.NotNull(result);
+      Assert.NotNull(null);
     }
 
   }
