@@ -52,8 +52,8 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build apis/poi/web -t ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:latest
-        docker push ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:$GITHUB_RUN_NUMBER        
+        docker build apis/poi/web -t ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:${{github.run_number}}
+        docker push ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:${{github.run_number}}
     
     - name: Create An Issue
       if: ${{ failure() }}
