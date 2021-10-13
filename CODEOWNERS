@@ -7,7 +7,7 @@
 # Order is important. The last matching pattern has the most precedence.
 # So if a pull request only touches javascript files, only these owners
 # will be requested to review.
-/apis/poi   @marlinspike
-/api/trips  @wtomaz808
-/api/user-java   @chu-chen
-/api/userprofile  @alexumanamonge
+/apis/poi   @marlinspike @nelsd @Boykai @britdt
+/api/trips  @wtomaz808 @nelsd @Boykai @britdt
+/api/user-java   @chu-chen @nelsd @Boykai @britdt
+/api/userprofile  @alexumanamonge @nelsd @Boykai @britdt
