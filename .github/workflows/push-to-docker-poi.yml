@@ -37,4 +37,4 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
           docker build apis/poi/web -t ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:latest
-          docker push ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:latest
+          docker push ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:$GITHUB_RUN_NUMBER
