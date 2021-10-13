@@ -43,6 +43,6 @@ jobs:
           # Password or personal access token used to log against the Docker registry
           password: ${{ secrets.REGISTRY_PASSWORD }}
           # Image Build Version
-          image_version: devopsoh/api-poi:1
+          image_version: 1
           # Docker File Directory, Default Current Directory (.)
           docker_file: apis/poi/web .
