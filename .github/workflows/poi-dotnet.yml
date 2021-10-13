@@ -2,16 +2,15 @@ name: POI (.NET) Build and Test
 
 on:
   push:
-    branches: [ main, chu-chen-branch ]
+    branches: [ main ]
     paths: apis/poi
   pull_request:
-    branches: [ main, chu-chen-branch ]
+    branches: [ main ]
     paths: apis/poi
   workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     
     steps:
@@ -37,3 +36,21 @@ jobs:
         GITHUB_ISSUE_BODY: 'Check your failed POI build'
       with:
         filename: .github/ISSUE_TEMPLATE_chu.md
+        
+  docker_push:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:  
+    - name: Docker Images Build And Push
+    # You may pin to the exact commit or the version.
+    # uses: risfeng/docker-image-build-push-action@cb2810d0b48aeef5fec933dee19b595319c80e1d
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.ACR_ENDPOINT }} # default: index.docker.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+        docker build apis/poi/web -t ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:latest
+        docker push ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:$GITHUB_RUN_NUMBER        
