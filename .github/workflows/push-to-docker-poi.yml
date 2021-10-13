@@ -39,10 +39,10 @@ jobs:
           # Docker Image Repository Name, eg: adc.ms.eureka
           repository_name: devopsoh/api-poi
           # Username used to log against the Docker registry
-          username: ${{ secrets.REGISTRY_USERNAME }}
+          user_name: ${{ secrets.REGISTRY_USERNAME }}
           # Password or personal access token used to log against the Docker registry
           password: ${{ secrets.REGISTRY_PASSWORD }}
           # Image Build Version
-          image_version: devopsoh/api-poi:${BASEIMAGETAG}
+          image_version: devopsoh/api-poi:1
           # Docker File Directory, Default Current Directory (.)
           docker_file: apis/poi/web .
