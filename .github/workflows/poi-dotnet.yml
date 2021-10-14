@@ -69,7 +69,9 @@ jobs:
     needs: docker_push
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-
+    environment:
+      name: staging
+      url: "https://openhackfc90kk36poi-staging.azurewebsites.net"
     steps:
     - uses: actions/checkout@v2
     - name: Docker Deployment
