@@ -53,8 +53,8 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build apis/poi/web -t ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:latest
-        docker push ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:latest
+        docker build apis/poi/web -t ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:${{github.run_number}}
+        docker push ${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:${{github.run_number}}
     
     - name: Create An Issue
       if: ${{ failure() }}
@@ -75,5 +75,28 @@ jobs:
       uses: Azure/webapps-deploy@v2
       with:
         app-name: 'openhackfc90kk36poi'
+        slot-name: 'openhackfc90kk36poi-staging'
         publish-profile: ${{ secrets.POI_AZURE_WEBAPP_PUBLISH_PROFILE }}
-        images: '${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:latest'
+        images: '${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:${{github.run_number}}'
+        
+        
+  assign_image:
+    needs: docker_deploy
+    runs-on: ubuntu-latest    
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Azure CLI Action
+      uses: Azure/cli@1.0.4
+      with:
+        # Specify the script here
+        inlineScript: |
+          az webapp deployment slot swap  -g openhackfc90kk36rg -n openhackfc90kk36poi --slot staging --target-slot production
+    
