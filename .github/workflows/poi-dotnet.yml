@@ -131,7 +131,10 @@ jobs:
     needs: check_status_staging
     runs-on: ubuntu-latest    
     if: github.ref == 'refs/heads/main'
-
+    environment:
+      name: production
+      url: "https://openhackfc90kk36poi.azurewebsites.net"
+    
     steps:
     - uses: actions/checkout@v2
     
@@ -197,7 +200,9 @@ jobs:
     needs: check_status_prod
     runs-on: ubuntu-latest    
     if: ${{ failure() }}
-
+    environment:
+      name: production
+      url: "https://openhackfc90kk36poi.azurewebsites.net"
     steps:
     - uses: actions/checkout@v2
     
