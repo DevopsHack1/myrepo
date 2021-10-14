@@ -79,6 +79,12 @@ jobs:
         publish-profile: ${{ secrets.POI_AZURE_WEBAPP_PUBLISH_PROFILE_STAGING }}
         images: '${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:${{github.run_number}}'
         
+  check_status:
+    needs: docker_deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
     - name: Check Staging Status
       # You may pin to the exact commit or the version.
       # uses: lakuapik/gh-actions-http-status@705c34b4307b8a0354a431b75bb5910b6562dd20
@@ -88,9 +94,9 @@ jobs:
         sites: '["https://openhackfc90kk36poi-staging.azurewebsites.net/api/healthcheck/poi"]'
         # List expected HTTP status codes in JSON (eg: [301, 200])
         expected: '[200]'
-        
+
   swap_slot:
-    needs: docker_deploy
+    needs: check_status
     runs-on: ubuntu-latest    
     if: github.ref == 'refs/heads/main'
 
