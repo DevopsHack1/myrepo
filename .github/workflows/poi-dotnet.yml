@@ -76,11 +76,11 @@ jobs:
       with:
         app-name: 'openhackfc90kk36poi'
         slot-name: 'openhackfc90kk36poi-staging'
-        publish-profile: ${{ secrets.POI_AZURE_WEBAPP_PUBLISH_PROFILE }}
+        publish-profile: ${{ secrets.POI_AZURE_WEBAPP_PUBLISH_PROFILE_STAGING }}
         images: '${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:${{github.run_number}}'
         
         
-  assign_image:
+  swap_slot:
     needs: docker_deploy
     runs-on: ubuntu-latest    
     if: github.ref == 'refs/heads/main'
@@ -98,5 +98,6 @@ jobs:
       with:
         # Specify the script here
         inlineScript: |
-          az webapp deployment slot swap  -g openhackfc90kk36rg -n openhackfc90kk36poi --slot staging --target-slot production
+          # az webapp update -g openhackfc90kk36rg -n openhackfc90kk36poi --set tags.tagName=${{github.run_number}}
+          az webapp deployment slot swap -g openhackfc90kk36rg -n openhackfc90kk36poi --slot staging --target-slot production
     
