@@ -79,12 +79,24 @@ jobs:
         publish-profile: ${{ secrets.POI_AZURE_WEBAPP_PUBLISH_PROFILE_STAGING }}
         images: '${{ secrets.ACR_ENDPOINT }}/devopsoh/api-poi:${{github.run_number}}'
         
-  check_status:
+  check_status_staging:
     needs: docker_deploy
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
     steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Azure CLI Action
+      uses: Azure/cli@1.0.4
+      with:
+        # Specify the script here
+        inlineScript: |
+          az webapp traffic-routing set --distribution staging=40 --name openhackfc90kk36poi --resource-group openhackfc90kk36rg
+         
     - name: Check Staging Status
       # You may pin to the exact commit or the version.
       # uses: lakuapik/gh-actions-http-status@705c34b4307b8a0354a431b75bb5910b6562dd20
@@ -96,7 +108,7 @@ jobs:
         expected: '[200]'
 
   swap_slot:
-    needs: check_status
+    needs: check_status_staging
     runs-on: ubuntu-latest    
     if: github.ref == 'refs/heads/main'
 
@@ -114,5 +126,53 @@ jobs:
         # Specify the script here
         inlineScript: |
           # az webapp update -g openhackfc90kk36rg -n openhackfc90kk36poi --set tags.tagName=${{github.run_number}}
-          az webapp deployment slot swap -g openhackfc90kk36rg -n openhackfc90kk36poi --slot staging --target-slot production
+           az webapp deployment slot swap -g openhackfc90kk36rg -n openhackfc90kk36poi --slot staging --target-slot production
     
+  check_status_prod:
+    needs: swap_slot
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Check Prod Status
+      # You may pin to the exact commit or the version.
+      # uses: lakuapik/gh-actions-http-status@705c34b4307b8a0354a431b75bb5910b6562dd20
+      uses: lakuapik/gh-actions-http-status@v1
+      with:
+        # List website urls in JSON (eg: ["http://github.com", "https://education.github.com"])
+        sites: '["https://openhackfc90kk36poi.azurewebsites.net/api/healthcheck/poi"]'
+        # List expected HTTP status codes in JSON (eg: [301, 200])
+        expected: '[200]'
+        
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Azure CLI Action
+      uses: Azure/cli@1.0.4
+      with:
+        # Specify the script here
+        inlineScript: |
+          az webapp traffic-routing set --distribution staging=0 --name openhackfc90kk36poi --resource-group openhackfc90kk36rg     
+        
+  roll_back:
+    needs: check_status_prod
+    runs-on: ubuntu-latest    
+    if: ${{ failure() }}
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Azure CLI Action
+      uses: Azure/cli@1.0.4
+      with:
+        # Specify the script here
+        inlineScript: |
+          # az webapp update -g openhackfc90kk36rg -n openhackfc90kk36poi --set tags.tagName=${{github.run_number}}
+          az webapp deployment slot swap -g openhackfc90kk36rg -n openhackfc90kk36poi --slot staging --target-slot production
